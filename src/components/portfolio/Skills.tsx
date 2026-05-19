@@ -9,7 +9,7 @@ function Row({ reverse }: { reverse?: boolean }) {
         {items.map((t, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-2 rounded-pill border border-border bg-surface px-5 py-2.5 text-sm font-medium"
+            className="inline-flex items-center gap-2 rounded-pill border border-border bg-surface px-4 py-2 text-sm font-medium lg:px-5 lg:py-2.5"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             {t}
@@ -22,8 +22,8 @@ function Row({ reverse }: { reverse?: boolean }) {
 
 export function Skills() {
   return (
-    <section id="skills" className="relative py-24 md:py-28">
-      <div className="mx-auto max-w-7xl px-5">
+    <section className="relative py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-16">
         <SectionHeading
           eyebrow="Tech stack"
           title="Tools of the trade"
@@ -31,7 +31,7 @@ export function Skills() {
           align="center"
         />
       </div>
-      <div className="mt-12 space-y-4">
+      <div className="mt-10 space-y-3 lg:mt-12 lg:space-y-4">
         <Row />
         <Row reverse />
       </div>

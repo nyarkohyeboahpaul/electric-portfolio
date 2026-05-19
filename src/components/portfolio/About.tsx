@@ -26,11 +26,11 @@ function SkillBar({ name, percentage, delay }: { name: string; percentage: numbe
   );
 }
 
-export function About() {
+export function About({ onContact }: { onContact: () => void }) {
   return (
-    <section id="about" className="relative py-24 md:py-32">
-      <div className="mx-auto grid max-w-7xl gap-14 px-5 md:grid-cols-2 md:items-center md:gap-16">
-        {/* Photo + chips */}
+    <section className="relative py-16 lg:py-24">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-16">
+        {/* Photo */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -46,33 +46,43 @@ export function About() {
               width={896}
               height={1152}
               className="aspect-[4/5] w-full object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
           </div>
-          {/* floating chips */}
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 30, scale: 0.8 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 + i * 0.15, type: "spring", stiffness: 220, damping: 18 }}
-              className="glass absolute rounded-2xl border border-border px-4 py-3 shadow-glow"
-              style={{
-                top: i === 0 ? "8%" : i === 1 ? "44%" : "78%",
-                right: i % 2 === 0 ? "-18px" : "auto",
-                left: i % 2 === 1 ? "-22px" : "auto",
-              }}
-            >
-              <div className="font-display text-2xl font-bold leading-none">
-                {s.value}
-                <span className="text-accent">{s.suffix}</span>
+          {/* Stat chips: floating on desktop, scrollable row on mobile */}
+          <div className="mt-4 flex gap-3 overflow-x-auto no-scrollbar lg:hidden">
+            {stats.map((s) => (
+              <div key={s.label} className="glass shrink-0 rounded-2xl border border-border px-4 py-3">
+                <div className="font-display text-xl font-bold leading-none">
+                  {s.value}<span className="text-accent">{s.suffix}</span>
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
               </div>
-              <div className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                {s.label}
-              </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
+          <div className="pointer-events-none hidden lg:block">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + i * 0.15, type: "spring", stiffness: 220, damping: 18 }}
+                className="glass absolute rounded-2xl border border-border px-4 py-3 shadow-glow"
+                style={{
+                  top: i === 0 ? "8%" : i === 1 ? "44%" : "78%",
+                  right: i % 2 === 0 ? "-18px" : "auto",
+                  left: i % 2 === 1 ? "-22px" : "auto",
+                }}
+              >
+                <div className="font-display text-2xl font-bold leading-none">
+                  {s.value}<span className="text-accent">{s.suffix}</span>
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{s.label}</div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Content */}
@@ -82,7 +92,7 @@ export function About() {
             title="About me"
             subtitle="A story of hard work, late kerning, and on-time deliveries."
           />
-          <div className="mt-6 space-y-4 text-muted-foreground">
+          <div className="mt-6 space-y-4 text-base text-muted-foreground">
             <p>
               I started designing in 2017 in a Quezon City coffee shop with a
               borrowed MacBook and an unreasonable amount of optimism. Today I lead
@@ -103,11 +113,19 @@ export function About() {
             </a>
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#contact" className="inline-flex items-center gap-2 rounded-pill bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-transform hover:scale-[1.03]">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              onClick={onContact}
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground active:scale-[0.98]"
+            >
               <Send className="h-4 w-4" /> Hire Me
-            </a>
-            <a href="#contact" className="inline-flex items-center gap-2 rounded-pill border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent">
+            </button>
+            <a
+              href="/files/cv.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-pill border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+            >
               <Download className="h-4 w-4" /> Download CV
             </a>
           </div>

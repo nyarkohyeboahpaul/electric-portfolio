@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Download } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import portrait from "@/assets/portrait.jpg";
-import { orbitSkills, stats, ROLE } from "@/lib/data";
+import { orbitSkills, stats } from "@/lib/data";
 import { useCountUp } from "@/hooks/use-count-up";
 
 const ROLES = ["Designer.", "Developer.", "Creator."];
@@ -16,11 +17,11 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
   const n = useCountUp(value, 1800, start);
   return (
     <div>
-      <div className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+      <div className="font-display text-2xl font-bold tracking-tight xs:text-3xl lg:text-4xl">
         {n}
         <span className="text-accent">{suffix}</span>
       </div>
-      <div className="mt-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
+      <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground xs:text-xs">{label}</div>
     </div>
   );
 }
@@ -56,14 +57,14 @@ function TypewriterRole() {
   );
 }
 
-export function Hero() {
+export function Hero({ onContact }: { onContact: () => void }) {
   return (
-    <section id="hero" className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
+    <section className="relative overflow-hidden pt-24 pb-16 sm:pt-28 lg:pt-40 lg:pb-32">
       <div className="hex-grid absolute inset-0 -z-10 opacity-50" />
       <div className="noise-bg pointer-events-none absolute inset-0 -z-10" />
 
-      <div className="mx-auto grid max-w-7xl gap-14 px-5 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-10">
-        {/* Left */}
+      <div className="mx-auto flex max-w-7xl flex-col-reverse gap-10 px-5 sm:px-8 lg:grid lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-10 lg:px-16">
+        {/* Text */}
         <div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -79,7 +80,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.7 }}
-            className="mt-6 font-display text-5xl font-bold leading-[0.95] tracking-tight md:text-7xl lg:text-[88px]"
+            className="mt-5 font-display text-4xl font-bold leading-[0.95] tracking-tight xs:text-5xl lg:text-7xl xl:text-[88px]"
           >
             UI & UX
             <br />
@@ -90,7 +91,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, duration: 0.6 }}
-            className="mt-8 max-w-xl text-base text-muted-foreground md:text-lg"
+            className="mt-6 max-w-xl text-base text-muted-foreground lg:mt-8 lg:text-lg"
           >
             I'm Alex Wallace, an independent product designer in Manila helping
             startups and teams ship calm, fast, and quietly opinionated digital
@@ -101,29 +102,29 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.6 }}
-            className="mt-8 flex flex-wrap items-center gap-3"
+            className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:mt-8"
           >
-            <a
-              href="#portfolio"
-              className="group inline-flex items-center gap-2 rounded-pill bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-all hover:scale-[1.02] hover:shadow-glow"
+            <Link
+              to="/projects"
+              className="group inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-pill bg-accent px-6 py-3 text-sm font-medium text-accent-foreground transition-all active:scale-[0.98] hover:shadow-glow sm:w-auto"
             >
-              View Portfolio
+              View Projects
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
-            <a
-              href="#contact"
-              className="group inline-flex items-center gap-2 rounded-pill border border-border bg-surface/40 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            </Link>
+            <button
+              onClick={onContact}
+              className="group inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-pill border border-border bg-surface/40 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent active:scale-[0.98] sm:w-auto"
             >
               <Download className="h-4 w-4" />
-              Download CV
-            </a>
+              Get in touch
+            </button>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
-            className="mt-14 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-8"
+            className="mt-10 grid max-w-md grid-cols-2 gap-6 border-t border-border pt-6 sm:grid-cols-3 lg:mt-14 lg:pt-8"
           >
             {stats.map((s) => (
               <StatCounter key={s.label} value={s.value} suffix={s.suffix} label={s.label} />
@@ -131,15 +132,14 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Right — Portrait + orbit */}
+        {/* Portrait */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative mx-auto aspect-square w-full max-w-[480px]"
+          className="relative mx-auto aspect-square w-full max-w-[280px] sm:max-w-[360px] lg:max-w-[480px]"
         >
-          {/* gradient ring */}
-          <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_140deg,theme(colors.accent),transparent_40%,theme(colors.accent)_70%,transparent)] opacity-80 blur-[1px]" />
+          <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_140deg,var(--accent),transparent_40%,var(--accent)_70%,transparent)] opacity-80 blur-[1px]" />
           <div className="absolute inset-[8px] rounded-full bg-background" />
           <div className="absolute inset-[14px] overflow-hidden rounded-full border border-white/5">
             <img
@@ -153,8 +153,7 @@ export function Hero() {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
           </div>
 
-          {/* orbit badges */}
-          <div className="pointer-events-none absolute inset-0 hidden md:block">
+          <div className="pointer-events-none absolute inset-0 hidden lg:block">
             {orbitSkills.map((s, i) => {
               const radius = i % 2 === 0 ? 230 : 250;
               const duration = 22 + i * 2;
@@ -179,9 +178,9 @@ export function Hero() {
             })}
           </div>
 
-          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-pill border border-border bg-surface px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-pill border border-border bg-surface px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground lg:-bottom-6 lg:px-4 lg:py-2 lg:text-xs">
             <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-accent" />
-            Available for projects — Q3
+            Available — Q3
           </div>
         </motion.div>
       </div>
