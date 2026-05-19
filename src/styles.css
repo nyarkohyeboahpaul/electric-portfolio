@@ -11,6 +11,8 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
+  --breakpoint-xs: 375px;
+
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
@@ -46,14 +48,14 @@
 }
 
 :root {
-  --background: oklch(0.14 0 0);            /* #0A0A0A */
-  --foreground: oklch(0.96 0 0);            /* #F5F5F5 */
-  --surface: oklch(0.17 0 0);               /* #111111 */
-  --surface-2: oklch(0.21 0 0);             /* #1A1A1A */
-  --border: oklch(0.24 0 0);                /* #1F1F1F */
+  --background: oklch(0.14 0 0);
+  --foreground: oklch(0.96 0 0);
+  --surface: oklch(0.17 0 0);
+  --surface-2: oklch(0.21 0 0);
+  --border: oklch(0.24 0 0);
   --muted: oklch(0.21 0 0);
-  --muted-foreground: oklch(0.62 0 0);      /* #888 */
-  --accent: oklch(0.83 0.18 165);           /* #00E5A0 electric green */
+  --muted-foreground: oklch(0.62 0 0);
+  --accent: oklch(0.83 0.18 165);
   --accent-foreground: oklch(0.14 0 0);
   --accent-dim: color-mix(in oklab, oklch(0.83 0.18 165) 12%, transparent);
   --radius: 12px;
@@ -89,7 +91,6 @@
   }
   ::selection { background: var(--accent); color: var(--accent-foreground); }
 
-  /* honeycomb pattern */
   .hex-grid {
     background-image:
       radial-gradient(circle at 1px 1px, oklch(1 0 0 / 0.06) 1px, transparent 0);
@@ -98,6 +99,10 @@
   .noise-bg {
     background-image: radial-gradient(ellipse at top, color-mix(in oklab, var(--accent) 8%, transparent), transparent 60%);
   }
+
+  /* hide scrollbar utility for filter row */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -120,12 +125,8 @@
     -webkit-backdrop-filter: blur(14px);
   }
   .glow-accent { box-shadow: var(--shadow-glow); }
-  .marquee {
-    animation: marquee 40s linear infinite;
-  }
-  .marquee-reverse {
-    animation: marquee 40s linear infinite reverse;
-  }
+  .marquee { animation: marquee 40s linear infinite; }
+  .marquee-reverse { animation: marquee 40s linear infinite reverse; }
   @keyframes marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -141,4 +142,8 @@
     100% { box-shadow: 0 0 0 0 transparent; }
   }
   .pulse-ring { animation: pulse-ring 2.4s var(--ease-smooth) infinite; }
+
+  .safe-bottom {
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
 }
