@@ -66,7 +66,7 @@ function ProjectDetail() {
           <div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Tools</div>
             <div className="mt-1 flex flex-wrap gap-1.5">
-              {p.tools.map((t) => (
+              {p.tools.map((t: string) => (
                 <span key={t} className="rounded-pill border border-border px-2 py-0.5 text-xs">{t}</span>
               ))}
             </div>
