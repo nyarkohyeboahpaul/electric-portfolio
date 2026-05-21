@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useAdminAuth, claimAdminIfNone } from "@/lib/admin-auth";
+import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Wraps every admin page. Redirects to /admin/login if not signed in.
- * If signed in but not admin, shows a Claim Admin button (only works
- * before any admin exists — backed by the SECURITY DEFINER RPC).
+ * If signed in but not the assigned admin, shows a sign-out option.
  */
 export function AdminGate({ title, children }: { title: string; children: React.ReactNode }) {
-  const { loading, userId, isAdmin } = useAdminAuth();
+  const { loading, userId, email, isAdmin } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,23 +30,17 @@ export function AdminGate({ title, children }: { title: string; children: React.
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] px-4">
         <div className="max-w-md rounded-xl border border-[#1F1F1F] bg-[#111] p-8 text-center">
-          <h2 className="mb-2 text-xl font-bold">Admin access required</h2>
+          <h2 className="mb-2 text-xl font-bold">Not authorized</h2>
           <p className="mb-6 text-sm text-[#888]">
-            You're signed in but don't have the admin role. If no admin exists yet,
-            you can claim it now (one-time only).
+            {email ? <>You're signed in as <span className="text-white">{email}</span>, which isn't the admin account.</> : "This account doesn't have admin access."} Sign in with the admin account to continue.
           </p>
           <Button
             onClick={async () => {
-              const ok = await claimAdminIfNone(userId);
-              if (ok) {
-                toast.success("You're now the admin. Reloading…");
-                setTimeout(() => window.location.reload(), 600);
-              } else {
-                toast.error("An admin already exists. Ask them to grant you access.");
-              }
+              await supabase.auth.signOut();
+              navigate({ to: "/admin/login" });
             }}
           >
-            Claim admin role
+            Sign out
           </Button>
         </div>
       </div>
