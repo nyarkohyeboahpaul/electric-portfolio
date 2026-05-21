@@ -1,8 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { EditRoute } from "./projects.new";
+import { AdminGate } from "@/components/admin/AdminGate";
+import { ProjectForm } from "./projects.new";
 
-export const Route = EditRoute;
-
-// Re-declare so the TanStack Router plugin picks this file up.
-// The actual component is defined in ./projects.new (shared form).
-void createFileRoute;
+export const Route = createFileRoute("/admin/projects/$id")({
+  component: () => (
+    <AdminGate title="Edit Project">
+      <ProjectForm />
+    </AdminGate>
+  ),
+  head: () => ({
+    meta: [
+      { title: "Admin · Edit Project" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+});
