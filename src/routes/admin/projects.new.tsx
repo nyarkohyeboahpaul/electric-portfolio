@@ -21,8 +21,9 @@ function slugify(s: string) {
 export function ProjectForm() {
 
   const navigate = useNavigate();
-  const params = (Route as any).useParams?.() ?? {};
-  const id = (params.id as string | undefined) ?? null;
+  const params = useParams({ strict: false }) as { id?: string };
+  const id = params.id ?? null;
+
   const isEdit = !!id;
 
   const [form, setForm] = useState({
