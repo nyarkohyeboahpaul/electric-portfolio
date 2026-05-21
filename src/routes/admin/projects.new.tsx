@@ -14,16 +14,12 @@ export const Route = createFileRoute("/admin/projects/new")({
   head: () => ({ meta: [{ title: "Admin · New Project" }, { name: "robots", content: "noindex" }] }),
 });
 
-export const EditRoute = createFileRoute("/admin/projects/$id")({
-  component: () => <AdminGate title="Edit Project"><ProjectForm /></AdminGate>,
-  head: () => ({ meta: [{ title: "Admin · Edit Project" }, { name: "robots", content: "noindex" }] }),
-});
-
 function slugify(s: string) {
   return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-function ProjectForm() {
+export function ProjectForm() {
+
   const navigate = useNavigate();
   const params = (Route as any).useParams?.() ?? {};
   const id = (params.id as string | undefined) ?? null;
