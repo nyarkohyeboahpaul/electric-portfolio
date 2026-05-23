@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
  * If signed in but not the assigned admin, shows a sign-out option.
  */
 export function AdminGate({ title, children }: { title: string; children: React.ReactNode }) {
-  const { loading, userId, email, isAdmin } = useAdminAuth();
+  const { loading, userId, email, isAdmin, error } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +22,20 @@ export function AdminGate({ title, children }: { title: string; children: React.
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A]">
         <Loader2 className="h-6 w-6 animate-spin text-[var(--accent)]" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] px-4">
+        <div className="max-w-md rounded-xl border border-[#1F1F1F] bg-[#111] p-8 text-center">
+          <h2 className="mb-2 text-xl font-bold">Admin access check failed</h2>
+          <p className="mb-6 text-sm text-[#888]">
+            Your sign-in worked, but the dashboard could not verify the admin role yet.
+          </p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
       </div>
     );
   }

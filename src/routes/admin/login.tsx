@@ -23,15 +23,14 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 function LoginPage() {
-  const { userId, loading } = useAdminAuth();
+  const { isAdmin, loading } = useAdminAuth();
   const navigate = useNavigate();
   const [showPwd, setShowPwd] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
 
   useEffect(() => {
-    if (!loading && userId) navigate({ to: "/admin" });
-  }, [loading, userId, navigate]);
+    if (!loading && isAdmin) navigate({ to: "/admin" });
+  }, [loading, isAdmin, navigate]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -41,20 +40,9 @@ function LoginPage() {
   async function onSubmit(values: FormValues) {
     setSubmitting(true);
     try {
-      if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword(values);
-        if (error) throw error;
-        toast.success("Welcome back");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email: values.email,
-          password: values.password,
-          options: { emailRedirectTo: window.location.origin + "/admin" },
-        });
-        if (error) throw error;
-        toast.success("Account created. Check your inbox to confirm, then sign in.");
-        setMode("signin");
-      }
+      const { error } = await supabase.auth.signInWithPassword(values);
+      if (error) throw error;
+      toast.success("Welcome back");
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -95,7 +83,7 @@ function LoginPage() {
               <Input
                 id="password"
                 type={showPwd ? "text" : "password"}
-                autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                autoComplete="current-password"
                 {...form.register("password")}
                 className="bg-[#1A1A1A] pr-10"
               />
@@ -114,21 +102,9 @@ function LoginPage() {
 
           <Button type="submit" disabled={submitting} className="w-full">
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === "signin" ? "Sign In" : "Create account"}
+            Sign In
           </Button>
         </form>
-
-        <div className="mt-4 text-center text-xs text-[#888]">
-          {mode === "signin" ? (
-            <button onClick={() => setMode("signup")} className="hover:text-white">
-              First time? Create the admin account
-            </button>
-          ) : (
-            <button onClick={() => setMode("signin")} className="hover:text-white">
-              Have an account? Sign in
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
