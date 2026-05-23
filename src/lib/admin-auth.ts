@@ -6,6 +6,7 @@ export type AdminAuthState = {
   userId: string | null;
   email: string | null;
   isAdmin: boolean;
+  error: string | null;
 };
 
 export function useAdminAuth(): AdminAuthState {
@@ -14,6 +15,7 @@ export function useAdminAuth(): AdminAuthState {
     userId: null,
     email: null,
     isAdmin: false,
+    error: null,
   });
 
   useEffect(() => {
@@ -21,11 +23,11 @@ export function useAdminAuth(): AdminAuthState {
 
     async function check(userId: string | null, email: string | null) {
       if (!userId) {
-        if (mounted) setState({ loading: false, userId: null, email: null, isAdmin: false });
+        if (mounted) setState({ loading: false, userId: null, email: null, isAdmin: false, error: null });
         return;
       }
       // RLS lets the user read their own user_roles rows.
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
@@ -36,7 +38,8 @@ export function useAdminAuth(): AdminAuthState {
           loading: false,
           userId,
           email,
-          isAdmin: !!data,
+          isAdmin: !error && !!data,
+          error: error?.message ?? null,
         });
       }
     }
@@ -56,20 +59,4 @@ export function useAdminAuth(): AdminAuthState {
   }, []);
 
   return state;
-}
-
-/**
- * If there is no admin in user_roles yet, the first signed-in user can claim
- * the role. Returns true if the claim succeeded.
- */
-export async function claimAdminIfNone(userId: string): Promise<boolean> {
-  // Use a server-side RPC-like approach via the table directly. The RLS
-  // policy on user_roles only allows admins to insert — so on first claim
-  // we use a small SECURITY DEFINER function. We add it inline via a check:
-  // try to insert; if it fails, attempt RPC. For simplicity here we just
-  // count existing admins via select (users can read their own rows only,
-  // so we use the count on the public exposed RPC).
-  // Simpler: rely on a server function endpoint we expose separately.
-  const { data } = await supabase.rpc("claim_admin_if_none", { _user_id: userId });
-  return !!data;
 }
