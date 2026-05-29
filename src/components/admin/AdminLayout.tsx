@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, Palette, Briefcase, LogOut, Menu, ExternalLink,
 } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/lib/admin-auth";
@@ -87,16 +87,14 @@ export function AdminLayout({ title, children }: { title: string; children: Reac
         {/* Topbar */}
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#1F1F1F] bg-[#0A0A0A]/80 px-4 backdrop-blur lg:px-8">
           <div className="flex items-center gap-3">
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                onClick={() => setOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
             <h1 className="text-base font-semibold tracking-tight md:text-lg">{title}</h1>
           </div>
           <div className="flex items-center gap-2">
