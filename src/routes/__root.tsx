@@ -174,18 +174,20 @@ function PageTransitions() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { pathname } = useLocation();
   const [contactOpen, setContactOpen] = useState(false);
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
   return (
     <QueryClientProvider client={queryClient}>
       <ContactProvider value={{ open: () => setContactOpen(true) }}>
         <div className="dark min-h-screen bg-background text-foreground">
-          <Navbar onContact={() => setContactOpen(true)} />
-          <main className="pb-20 md:pb-0">
+          {!isAdminRoute && <Navbar onContact={() => setContactOpen(true)} />}
+          <main className={isAdminRoute ? "" : "pb-20 md:pb-0"}>
             <PageTransitions />
           </main>
-          <BottomNav />
-          <ContactSheet open={contactOpen} onOpenChange={setContactOpen} />
+          {!isAdminRoute && <BottomNav />}
+          {!isAdminRoute && <ContactSheet open={contactOpen} onOpenChange={setContactOpen} />}
           <Toaster theme="dark" position="bottom-right" />
           <PWARegister />
         </div>
