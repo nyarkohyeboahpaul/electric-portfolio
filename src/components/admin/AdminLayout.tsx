@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Palette, User, Briefcase, BookOpen, Image as ImageIcon,
-  FileText, Settings2, Quote, Mail, HardDrive, Settings, LogOut, Menu, ExternalLink,
+  LayoutDashboard, Palette, Briefcase, LogOut, Menu, ExternalLink,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -13,16 +12,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/appearance", label: "Appearance", icon: Palette },
-  { to: "/admin/profile", label: "Profile / Hero", icon: User },
   { to: "/admin/projects", label: "Projects", icon: Briefcase },
-  { to: "/admin/blog", label: "Blog", icon: BookOpen },
-  { to: "/admin/gallery", label: "Gallery", icon: ImageIcon },
-  { to: "/admin/resume", label: "Resume", icon: FileText },
-  { to: "/admin/services", label: "Services", icon: Settings2 },
-  { to: "/admin/testimonials", label: "Testimonials", icon: Quote },
-  { to: "/admin/messages", label: "Messages", icon: Mail },
-  { to: "/admin/media", label: "Media", icon: HardDrive },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
 ] as const;
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
