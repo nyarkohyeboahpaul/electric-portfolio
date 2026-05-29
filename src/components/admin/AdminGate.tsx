@@ -61,5 +61,5 @@ export function AdminGate({ title, children }: { title: string; children: React.
     );
   }
 
-  return <AdminLayout title={title}>{children}</AdminLayout>;
+  return <AdminLayout title={title} email={email}>{children}</AdminLayout>;
 }
