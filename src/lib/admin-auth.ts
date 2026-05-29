@@ -26,7 +26,21 @@ export function useAdminAuth(): AdminAuthState {
         if (mounted) setState({ loading: false, userId: null, email: null, isAdmin: false, error: null });
         return;
       }
-      // RLS lets the user read their own user_roles rows.
+      const { data: userResult, error: userError } = await supabase.auth.getUser();
+      if (userError || !userResult.user || userResult.user.id !== userId) {
+        if (mounted) {
+          setState({
+            loading: false,
+            userId: null,
+            email: null,
+            isAdmin: false,
+            error: userError?.message ?? "Could not verify your signed-in session.",
+          });
+        }
+        return;
+      }
+
+      // RLS lets the signed-in user read their own user_roles rows.
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")

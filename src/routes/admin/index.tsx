@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Briefcase, BookOpen, Image as ImageIcon, Mail, Plus, Upload, Eye } from "lucide-react";
+import { Briefcase, BookOpen, Image as ImageIcon, Mail, Plus, Palette } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminGate } from "@/components/admin/AdminGate";
 import { Button } from "@/components/ui/button";
@@ -69,13 +69,10 @@ function DashboardContent() {
             <Link to="/admin/projects/new"><Plus className="mr-2 h-4 w-4" /> New Project</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link to="/admin/blog/new"><Plus className="mr-2 h-4 w-4" /> New Blog Post</Link>
+            <Link to="/admin/projects"><Briefcase className="mr-2 h-4 w-4" /> Manage Projects</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link to="/admin/gallery"><Upload className="mr-2 h-4 w-4" /> Upload Image</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link to="/admin/messages"><Eye className="mr-2 h-4 w-4" /> View Messages</Link>
+            <Link to="/admin/appearance"><Palette className="mr-2 h-4 w-4" /> Edit Appearance</Link>
           </Button>
         </div>
       </section>

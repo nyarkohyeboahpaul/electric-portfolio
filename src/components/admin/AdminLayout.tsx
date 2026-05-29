@@ -1,33 +1,21 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Palette, User, Briefcase, BookOpen, Image as ImageIcon,
-  FileText, Settings2, Quote, Mail, HardDrive, Settings, LogOut, Menu, ExternalLink,
+  LayoutDashboard, Palette, Briefcase, LogOut, Menu, ExternalLink,
 } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminAuth } from "@/lib/admin-auth";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/appearance", label: "Appearance", icon: Palette },
-  { to: "/admin/profile", label: "Profile / Hero", icon: User },
   { to: "/admin/projects", label: "Projects", icon: Briefcase },
-  { to: "/admin/blog", label: "Blog", icon: BookOpen },
-  { to: "/admin/gallery", label: "Gallery", icon: ImageIcon },
-  { to: "/admin/resume", label: "Resume", icon: FileText },
-  { to: "/admin/services", label: "Services", icon: Settings2 },
-  { to: "/admin/testimonials", label: "Testimonials", icon: Quote },
-  { to: "/admin/messages", label: "Messages", icon: Mail },
-  { to: "/admin/media", label: "Media", icon: HardDrive },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
 ] as const;
 
-function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarContent({ email, onNavigate }: { email: string | null; onNavigate?: () => void }) {
   const { pathname } = useLocation();
-  const { email } = useAdminAuth();
   const navigate = useNavigate();
 
   const isActive = (to: string, exact?: boolean) =>
@@ -76,20 +64,20 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function AdminLayout({ title, children }: { title: string; children: React.ReactNode }) {
+export function AdminLayout({ title, email, children }: { title: string; email: string | null; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen w-full bg-[#0A0A0A] text-foreground">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 hidden w-[260px] border-r border-[#1F1F1F] lg:block">
-        <SidebarContent />
+        <SidebarContent email={email} />
       </aside>
 
       {/* Mobile drawer */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-[260px] border-r border-[#1F1F1F] bg-[#0D0D0D] p-0">
-          <SidebarContent onNavigate={() => setOpen(false)} />
+          <SidebarContent email={email} onNavigate={() => setOpen(false)} />
         </SheetContent>
       </Sheet>
 
@@ -97,16 +85,14 @@ export function AdminLayout({ title, children }: { title: string; children: Reac
         {/* Topbar */}
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#1F1F1F] bg-[#0A0A0A]/80 px-4 backdrop-blur lg:px-8">
           <div className="flex items-center gap-3">
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                onClick={() => setOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
             <h1 className="text-base font-semibold tracking-tight md:text-lg">{title}</h1>
           </div>
           <div className="flex items-center gap-2">
